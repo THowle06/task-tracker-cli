@@ -112,17 +112,10 @@ public class CommandHandler
 
     private async Task HandleList(string[] parameters)
     {
-        if (parameters.Length != 1)
-        {
-            Console.WriteLine("'list' command requires exactly 1 parameter.");
-            return;
-        }
+        string? filter = parameters.Length > 0 ? parameters[0] : null;
 
-        Console.WriteLine("Handling list command with parameters:");
-        foreach (var param in parameters)
-        {
-            Console.WriteLine($"\t{param}");
-        }
+        ListCommand listCommand = new ListCommand(_fileHandler);
+        await listCommand.ListTodosAsync(filter);
     }
 
     private async Task HandleMarkInProgress(string[] parameters)
