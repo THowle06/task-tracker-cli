@@ -106,11 +106,8 @@ public class CommandHandler
             return;
         }
 
-        Console.WriteLine("Handling delete command with parameters:");
-        foreach (var param in parameters)
-        {
-            Console.WriteLine($"\t{param}");
-        }
+        DeleteCommand deleteCommand = new DeleteCommand(_fileHandler);
+        await deleteCommand.DeleteTodoAsync(parameters[0]);
     }
 
     private async Task HandleList(string[] parameters)
