@@ -126,11 +126,8 @@ public class CommandHandler
             return;
         }
 
-        Console.WriteLine("Handling mark in progress command with parameters:");
-        foreach (var param in parameters)
-        {
-            Console.WriteLine($"\t{param}");
-        }
+        StatusCommand statusCommand = new StatusCommand(_fileHandler);
+        await statusCommand.UpdateStatusAsync(parameters[0], "in-progress");
     }
 
     private async Task HandleMarkDone(string[] parameters)
@@ -141,11 +138,8 @@ public class CommandHandler
             return;
         }
 
-        Console.WriteLine("Handling mark done command with parameters:");
-        foreach (var param in parameters)
-        {
-            Console.WriteLine($"\t{param}");
-        }
+        StatusCommand statusCommand = new StatusCommand(_fileHandler);
+        await statusCommand.UpdateStatusAsync(parameters[0], "done");
     }
 
     private void HandleUnknown(string command)
