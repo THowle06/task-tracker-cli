@@ -2,4 +2,4 @@
 
 CommandHandler commandHandler = new CommandHandler(args);
 
-commandHandler.Execute();
+await commandHandler.Execute();

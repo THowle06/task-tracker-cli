@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Todo JSON
+todos.json
+
 # dotenv files
 .env
 

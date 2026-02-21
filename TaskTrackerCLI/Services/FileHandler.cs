@@ -2,6 +2,8 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using TaskTrackerCLI.Models;
 
+namespace TaskTrackerCLI.Services;
+
 public class FileHandler
 {
     private const string FILE_NAME = "todos.json";
@@ -19,6 +21,10 @@ public class FileHandler
             return new List<Todo>();
 
         var json = await File.ReadAllTextAsync(FILE_NAME);
+
+        if (string.IsNullOrWhiteSpace(json))
+            return new List<Todo>();
+
         return JsonSerializer.Deserialize<List<Todo>>(json) ?? new List<Todo>();
     }
 

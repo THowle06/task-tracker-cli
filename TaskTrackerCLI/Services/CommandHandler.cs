@@ -1,3 +1,6 @@
+using System.Reflection;
+using TaskTrackerCLI.Commands;
+
 namespace TaskTrackerCLI.Services;
 
 public enum Command
@@ -12,14 +15,17 @@ public enum Command
 
 public class CommandHandler
 {
+    private readonly FileHandler _fileHandler;
+
     private string[] args;
 
     public CommandHandler(string[] args)
     {
         this.args = args;
+        _fileHandler = new FileHandler();
     }
 
-    public void Execute()
+    public async Task Execute()
     {
         if (args.Length == 0)
         {
@@ -40,22 +46,22 @@ public class CommandHandler
             switch (command)
             {
                 case Command.Add:
-                    HandleAdd(args.Skip(1).ToArray());
+                    await HandleAdd(args.Skip(1).ToArray());
                     break;
                 case Command.Update:
-                    HandleUpdate(args.Skip(1).ToArray());
+                    await HandleUpdate(args.Skip(1).ToArray());
                     break;
                 case Command.Delete:
-                    HandleDelete(args.Skip(1).ToArray());
+                    await HandleDelete(args.Skip(1).ToArray());
                     break;
                 case Command.List:
-                    HandleList(args.Skip(1).ToArray());
+                    await HandleList(args.Skip(1).ToArray());
                     break;
                 case Command.MarkInProgress:
-                    HandleMarkInProgress(args.Skip(1).ToArray());
+                    await HandleMarkInProgress(args.Skip(1).ToArray());
                     break;
                 case Command.MarkDone:
-                    HandleMarkDone(args.Skip(1).ToArray());
+                    await HandleMarkDone(args.Skip(1).ToArray());
                     break;
                 default:
                     HandleUnknown(args[0]);
@@ -68,7 +74,7 @@ public class CommandHandler
         }
     }
 
-    private void HandleAdd(string[] parameters)
+    private async Task HandleAdd(string[] parameters)
     {
         if (parameters.Length != 1)
         {
@@ -76,14 +82,11 @@ public class CommandHandler
             return;
         }
 
-        Console.WriteLine("Handling add command with parameters:");
-        foreach (var param in parameters)
-        {
-            Console.WriteLine($"\t{param}");
-        }
+        AddCommand addCommand = new AddCommand(_fileHandler);
+        await addCommand.AddTodoAsync(parameters[0]);
     }
 
-    private void HandleUpdate(string[] parameters)
+    private async Task HandleUpdate(string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -98,7 +101,7 @@ public class CommandHandler
         }
     }
 
-    private void HandleDelete(string[] parameters)
+    private async Task HandleDelete(string[] parameters)
     {
         if (parameters.Length != 1)
         {
@@ -113,7 +116,7 @@ public class CommandHandler
         }
     }
 
-    private void HandleList(string[] parameters)
+    private async Task HandleList(string[] parameters)
     {
         if (parameters.Length != 1)
         {
@@ -128,7 +131,7 @@ public class CommandHandler
         }
     }
 
-    private void HandleMarkInProgress(string[] parameters)
+    private async Task HandleMarkInProgress(string[] parameters)
     {
         if (parameters.Length != 1)
         {
@@ -143,7 +146,7 @@ public class CommandHandler
         }
     }
 
-    private void HandleMarkDone(string[] parameters)
+    private async Task HandleMarkDone(string[] parameters)
     {
         if (parameters.Length != 1)
         {
@@ -162,14 +165,5 @@ public class CommandHandler
     {
         Console.WriteLine($"Unknown command has been parsed: {command}");
         return;
-    }
-
-    public void PrintArgs()
-    {
-        Console.WriteLine("The following arguments have been received:");
-        foreach (var arg in args)
-        {
-            Console.WriteLine(arg);
-        }
     }
 }
