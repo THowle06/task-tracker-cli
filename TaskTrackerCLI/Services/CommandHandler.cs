@@ -94,11 +94,8 @@ public class CommandHandler
             return;
         }
 
-        Console.WriteLine("Handling update command with parameters:");
-        foreach (var param in parameters)
-        {
-            Console.WriteLine($"\t{param}");
-        }
+        UpdateCommand updateCommand = new UpdateCommand(_fileHandler);
+        await updateCommand.UpdateTodoAsync(parameters);
     }
 
     private async Task HandleDelete(string[] parameters)
